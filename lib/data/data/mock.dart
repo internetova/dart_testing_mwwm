@@ -5,13 +5,13 @@ import 'package:dart_testing/domain/question.dart';
 /// позже заменю на вопросы
 final List<Question> questionsMock = List<Question>.generate(
   30,
-  (int index) => Question(
+  (index) => Question(
     id: index,
     question: 'Вопрос $index',
     responseOptions: [
       'Вариант ответа 1',
       'Вариант ответа 2',
-      'Вариант ответа 3'
+      'Вариант ответа 3',
     ],
     idRightResponse: index,
   ),

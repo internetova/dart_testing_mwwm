@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:provider/provider.dart';
 
-
-class StartScreenRoute extends MaterialPageRoute {
+class StartScreenRoute extends MaterialPageRoute<StartScreen> {
   StartScreenRoute()
       : super(
-          builder: (context) => StartScreen(
+          builder: (context) => const StartScreen(
             widgetModelBuilder: _widgetModelBuilder,
           ),
         );
@@ -17,6 +16,6 @@ class StartScreenRoute extends MaterialPageRoute {
 
 StartScreenWidgetModel _widgetModelBuilder(BuildContext context) =>
     StartScreenWidgetModel(
-      WidgetModelDependencies(),
+      const WidgetModelDependencies(),
       context.read<QuestionInteractor>(),
     );

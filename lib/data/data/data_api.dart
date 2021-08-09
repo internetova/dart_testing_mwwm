@@ -6,5 +6,5 @@ abstract class DataApi {
   List<Question> getQuestions();
 
   /// Получить вопрос по id
-  getQuestion(int id);
+  Question getQuestion(int id);
 }

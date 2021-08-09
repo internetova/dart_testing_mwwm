@@ -5,24 +5,19 @@ import 'package:mwwm/mwwm.dart';
 class StartScreenWidgetModel extends WidgetModel {
   final QuestionInteractor interactor;
 
+  // для теста что правильно подключила всё
+  // todo del
+  late final Question testItem;
+
   StartScreenWidgetModel(
     WidgetModelDependencies baseDependencies,
     this.interactor,
   ) : super(baseDependencies);
-
-  // для теста что правильно подключила всё
-  // todo del
-  late final Question testItem;
 
   @override
   void onLoad() {
     super.onLoad();
 
     testItem = interactor.getRandomQuestion();
-  }
-
-  @override
-  void onBind() {
-    super.onBind();
   }
 }

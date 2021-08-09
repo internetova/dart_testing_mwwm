@@ -18,7 +18,7 @@ class QuestionInteractor {
   /// получить рандомный вопрос
   Question getRandomQuestion() {
     // сколько всего вопросов в базе
-    final int totalQuestions = repository.getQuestions().length;
+    final totalQuestions = repository.getQuestions().length;
     final random = Random();
 
     return repository.getQuestion(random.nextInt(totalQuestions + 1));

@@ -1,16 +1,19 @@
 import 'package:dart_testing/data/data/questions_data.dart';
+import 'package:dart_testing/data/interactor/question_interactor.dart';
 import 'package:dart_testing/data/repository/question_repository.dart';
 import 'package:dart_testing/ui/screens/startScreen/start_screen_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'data/interactor/question_interactor.dart';
-
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({
+    Key? key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -35,4 +38,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

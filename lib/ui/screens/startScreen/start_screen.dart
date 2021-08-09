@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:mwwm/mwwm.dart';
 
 class StartScreen extends CoreMwwmWidget<StartScreenWidgetModel> {
-  StartScreen({
+  const StartScreen({
     required WidgetModelBuilder<StartScreenWidgetModel> widgetModelBuilder,
-  }) : super(widgetModelBuilder: widgetModelBuilder);
+    Key? key,
+  }) : super(widgetModelBuilder: widgetModelBuilder, key: key);
 
   @override
   WidgetState<StartScreen, StartScreenWidgetModel> createWidgetState() =>
@@ -16,7 +17,7 @@ class _StartScreenState
     extends WidgetState<StartScreen, StartScreenWidgetModel> {
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Container(
+        body: Center(
           child: Text('id ${wm.testItem.id},  ${wm.testItem.question}'),
         ),
       );
