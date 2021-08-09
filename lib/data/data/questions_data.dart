@@ -9,7 +9,7 @@ class QuestionsData implements DataApi {
 
   /// Получить список всех вопросов
   @override
-  List<Question> getQuestions() => _data;
+  Iterable<Question> getQuestions() => _data;
 
   /// Получить вопрос по id
   @override

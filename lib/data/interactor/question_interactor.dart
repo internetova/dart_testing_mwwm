@@ -10,7 +10,7 @@ class QuestionInteractor {
   QuestionInteractor(this.repository);
 
   /// получить все вопросы
-  List<Question> getQuestions() => repository.getQuestions();
+  Iterable<Question> getQuestions() => repository.getQuestions();
 
   /// получить вопрос по id
   Question getQuestion(int id) => repository.getQuestion(id);

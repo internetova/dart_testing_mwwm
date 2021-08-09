@@ -8,7 +8,7 @@ class QuestionRepository {
   QuestionRepository(this.data);
 
   /// получить все вопросы
-  List<Question> getQuestions() => data.getQuestions();
+  Iterable<Question> getQuestions() => data.getQuestions();
 
 
   /// получить вопрос по id
