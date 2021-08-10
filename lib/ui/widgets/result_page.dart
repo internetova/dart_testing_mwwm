@@ -6,9 +6,11 @@ import 'package:relation/relation.dart';
 /// Страница с результатом тестирования
 class ResultPage extends StatelessWidget {
   final StreamedState<ResultTesting> resultTestingState;
+  final List<bool> results; // для построения прогресса
 
   const ResultPage({
     required this.resultTestingState,
+    required this.results,
     Key? key,
   }) : super(key: key);
 
@@ -16,19 +18,23 @@ class ResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamedStateBuilder<ResultTesting>(
       streamedState: resultTestingState,
-      builder: (context, state) => Column(
-        children: [
-          const SizedBox(height: 40),
-          const _BuildHeaderResult(),
-          const SizedBox(height: 40),
-          _BuildNumberQuestions(
-            questions: state.numberQuestions.toString(),
-          ),
-          const SizedBox(width: double.infinity, height: 20),
-          _BuildNumberErrors(
-            errors: state.numberErrors.toString(),
-          ),
-        ],
+      builder: (context, state) => Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            const _BuildHeaderResult(),
+            const SizedBox(height: 40),
+            _BuildNumberQuestions(
+              questions: state.numberQuestions.toString(),
+            ),
+            const SizedBox(width: double.infinity, height: 20),
+            _BuildNumberErrors(
+              errors: state.numberErrors.toString(),
+            ),
+            const SizedBox(height: 40),
+            _BuildProgress(results: results),
+          ],
+        ),
       ),
     );
   }
@@ -116,6 +122,69 @@ class _BuildNumberErrors extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// шкала результатов
+class _BuildProgress extends StatelessWidget {
+  final List<bool> results;
+
+  const _BuildProgress({
+    required this.results,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      child: Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            decoration: const BoxDecoration(),
+            width: double.infinity,
+            height: 16,
+          ),
+          Row(
+            children: results
+                .map((e) =>
+                    e == true ? const _BuildBoxGreen() : const _BuildBoxRed())
+                .toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// цвет для шкалы прогресса
+class _BuildBoxGreen extends StatelessWidget {
+  const _BuildBoxGreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Expanded(
+      child: ColoredBox(
+        color: Colors.green,
+        child: Text(''),
+      ),
+    );
+  }
+}
+
+/// цвет для шкалы прогресса
+class _BuildBoxRed extends StatelessWidget {
+  const _BuildBoxRed({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Expanded(
+      child: ColoredBox(
+        color: Colors.red,
+        child: Text(''),
+      ),
     );
   }
 }

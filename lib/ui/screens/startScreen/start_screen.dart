@@ -40,7 +40,10 @@ class _StartScreenState
                 break;
               case StatusStartScreen.finish:
                 child = Center(
-                  child: ResultPage(resultTestingState: wm.resultTestingState),
+                  child: ResultPage(
+                    resultTestingState: wm.resultTestingState,
+                    results: wm.testingState.value.responses,
+                  ),
                 );
                 break;
               default:
