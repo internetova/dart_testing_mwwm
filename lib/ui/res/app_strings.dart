@@ -1,5 +1,4 @@
 class AppStrings {
-  AppStrings._();
 
   static const pageLabelTest = 'тестирование';
   static const pageLabelStatistic = 'статистика';
@@ -8,4 +7,6 @@ class AppStrings {
   static const buttonLabelFinish = 'Закончить';
   static const buttonLabelRepeat = 'Повторить';
   static const textStart = 'Хотите протестировать свои знания по Dart?';
+
+  AppStrings._();
 }

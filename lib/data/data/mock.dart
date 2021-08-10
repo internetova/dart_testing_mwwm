@@ -13,6 +13,6 @@ final List<Question> questionsMock = List<Question>.generate(
       'Вариант ответа 2',
       'Вариант ответа 3',
     ],
-    idRightResponse: index,
+    idRightResponse: 0,
   ),
 );

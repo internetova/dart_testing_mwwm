@@ -19,26 +19,26 @@ class TestingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamedStateBuilder<Question>(
-        streamedState: question,
-        builder: (context, question) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              _BuildQuestion(question: question.question),
-              const SizedBox(
-                width: double.infinity,
-                height: 20,
-              ),
-              _BuildResponseOptions(
-                responseOptions: question.responseOptions,
-                onPressed: onPressed,
-              ),
-            ],
-          );
-        });
+      streamedState: question,
+      builder: (context, question) {
+        return Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            _BuildQuestion(question: question.question),
+            const SizedBox(
+              width: double.infinity,
+              height: 20,
+            ),
+            _BuildResponseOptions(
+              responseOptions: question.responseOptions,
+              onPressed: onPressed,
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -47,8 +47,8 @@ class _BuildQuestion extends StatelessWidget {
   final String question;
 
   const _BuildQuestion({
-    Key? key,
     required this.question,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -68,9 +68,9 @@ class _BuildResponseOptions extends StatelessWidget {
   final ValueChanged<int> onPressed;
 
   const _BuildResponseOptions({
-    Key? key,
     required this.responseOptions,
     required this.onPressed,
+    Key? key,
   }) : super(key: key);
 
   @override

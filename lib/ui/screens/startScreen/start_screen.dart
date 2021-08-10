@@ -1,6 +1,7 @@
 import 'package:dart_testing/ui/res/app_strings.dart';
 import 'package:dart_testing/ui/screens/startScreen/start_screen_wm.dart';
 import 'package:dart_testing/ui/widgets/custom_text_button.dart';
+import 'package:dart_testing/ui/widgets/result_page.dart';
 import 'package:dart_testing/ui/widgets/start_text.dart';
 import 'package:dart_testing/ui/widgets/testing_page.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class _StartScreenState
                 break;
               case StatusStartScreen.finish:
                 child = Center(
-                  child: const Text('Финиш тест, тут будут результаты теста'),
+                  child: ResultPage(resultTestingState: wm.resultTestingState),
                 );
                 break;
               default:

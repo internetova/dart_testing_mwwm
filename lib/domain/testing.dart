@@ -10,3 +10,16 @@ class Testing {
     required this.responses,
   });
 }
+
+/// итоговый результат тестирования
+/// [numberQuestions] количество вопросов
+/// [numberErrors] количество ошибок
+class ResultTesting {
+  final int numberQuestions;
+  final int numberErrors;
+
+  const ResultTesting({
+    required this.numberQuestions,
+    required this.numberErrors,
+  });
+}
