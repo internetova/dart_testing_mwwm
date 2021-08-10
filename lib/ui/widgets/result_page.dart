@@ -1,4 +1,5 @@
 import 'package:dart_testing/domain/testing.dart';
+import 'package:dart_testing/ui/res/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:relation/relation.dart';
 
@@ -40,7 +41,7 @@ class _BuildHeaderResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Результаты',
+      AppStrings.textResultPageResult,
       style: Theme.of(context).textTheme.headline3,
       textAlign: TextAlign.right,
     );
@@ -62,7 +63,7 @@ class _BuildNumberQuestions extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            'Вопросов:',
+            AppStrings.textResultPageQuestions,
             style: Theme.of(context).textTheme.bodyText1,
             textAlign: TextAlign.right,
           ),
@@ -95,7 +96,7 @@ class _BuildNumberErrors extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            'Ошибок:',
+            AppStrings.textResultPageErrors,
             style: Theme.of(context)
                 .textTheme
                 .bodyText1

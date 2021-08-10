@@ -7,6 +7,9 @@ class AppStrings {
   static const buttonLabelFinish = 'Закончить';
   static const buttonLabelRepeat = 'Повторить';
   static const textStart = 'Хотите протестировать свои знания по Dart?';
+  static const textResultPageResult = 'Результаты';
+  static const textResultPageQuestions = 'Вопросов:';
+  static const textResultPageErrors = 'Ошибок:';
 
   AppStrings._();
 }
