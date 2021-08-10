@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:relation/relation.dart';
 
 /// Страница тестирования - выводит вопрос с вариантами ответа
+/// [question] объект с вопросом, вариантами ответа и
+/// правильным ответом
 class TestingPage extends StatelessWidget {
   final StreamedState<Question> question;
-  final VoidCallback onPressed;
+  final ValueChanged<int> onPressed;
 
   const TestingPage({
     required this.question,
@@ -60,9 +62,10 @@ class _BuildQuestion extends StatelessWidget {
 }
 
 /// варианты ответа
+/// хранятся в списке, нажатием передаём индекс ответа
 class _BuildResponseOptions extends StatelessWidget {
   final List<String> responseOptions;
-  final VoidCallback onPressed;
+  final ValueChanged<int> onPressed;
 
   const _BuildResponseOptions({
     Key? key,
@@ -74,12 +77,15 @@ class _BuildResponseOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: responseOptions
-          .map(
-            (option) => CustomTextButtonResponse(
-              onPressed: onPressed,
-              title: option,
-            ),
-          )
+          .asMap()
+          .map((i, element) => MapEntry(
+                i,
+                CustomTextButtonResponse(
+                  onPressed: () => onPressed(i),
+                  title: element,
+                ),
+              ))
+          .values
           .toList(),
     );
   }

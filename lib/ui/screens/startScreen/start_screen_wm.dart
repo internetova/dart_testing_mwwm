@@ -14,7 +14,8 @@ class StartScreenWidgetModel extends WidgetModel {
   ) : super(baseDependencies);
 
   /// ДАННЫЕ ДЛЯ РАБОТЫ
-  /// Сюда будем записывать id вопроса и правильность ответа
+  /// временное хранилище результата тестирования - сюда будем записывать
+  /// id вопроса и правильность ответа
   final testing = Testing(
     idsQuestions: [],
     responses: [],
@@ -22,6 +23,9 @@ class StartScreenWidgetModel extends WidgetModel {
 
   /// Узнаем количество вопросов в тесте
   late final int totalQuestions;
+
+  /// Если выводим вопросы по порядку, то это для перехода к следующему вопросу
+  int currentQuestion = 0;
 
   /// СОСТОЯНИЯ
   /// текущий статус экрана
@@ -43,7 +47,7 @@ class StartScreenWidgetModel extends WidgetModel {
 
   /// клик по выбору ответа
   /// записывает ответ и перемещает к следующему вопросу
-  final onRespondAction = VoidAction();
+  final onRespondAction = StreamedAction<int>();
 
   /// клик по кнопке Закончить
   final onFinishAction = VoidAction();
@@ -52,51 +56,82 @@ class StartScreenWidgetModel extends WidgetModel {
   void onLoad() {
     testingState = StreamedState<Testing>(testing);
     totalQuestions = interactor.getQuestions().length;
-    currentQuestionState =
-        StreamedState<Question>(interactor.getQuestions().elementAt(0));
+    currentQuestionState = StreamedState<Question>(
+        interactor.getQuestions().elementAt(currentQuestion));
 
     super.onLoad();
   }
 
   @override
   void onBind() {
-    subscribe(onStartAction.stream, _onStart);
-    subscribe(onFinishAction.stream, _onFinish);
-    subscribe(onRespondAction.stream, _onRespond);
+    subscribe(onStartAction.stream, (_) => _onStart());
+    subscribe(onFinishAction.stream, (_) => _onFinish());
+    subscribe(onRespondAction.stream, (index) => _onRespond(index as int));
 
     super.onBind();
   }
 
   /// обрабатываем клик по кнопке Начать
-  void _onStart(_) {
+  void _onStart() {
     // меняем состояние экрана firstStart на testing
     currentStatusState.accept(StatusStartScreen.testing);
 
     // запускаем тест
-    currentQuestionState.accept(interactor.getQuestions().elementAt(0));
+    currentQuestionState.accept(interactor.getQuestions().elementAt(currentQuestion));
 
     // меняем состояние название кнопки
     buttonState.accept(AppStrings.buttonLabelFinish);
   }
 
   /// обрабатываем клик по кнопке Закончить
-  void _onFinish(_) {
+  void _onFinish() {
     // меняем состояние экрана testing на finish
     currentStatusState.accept(StatusStartScreen.finish);
 
     // меняем состояние название кнопки
     buttonState.accept(AppStrings.buttonLabelRepeat);
-
-    // todo считаем результат, выводим на экран
   }
 
   /// обрабатываем клик по варианту ответа
-  void _onRespond(_) {
-    // todo
-    print('_onRespond');
+  void _onRespond(int index) {
+    // записали во временное хранилище № вопроса и правильность ответа (true / false)
+    testing.idsQuestions.add(currentQuestionState.value.id);
+    testing.responses.add(
+      _checkResponse(
+        response: index,
+        idRightResponse: currentQuestionState.value.idRightResponse,
+      ),
+    );
 
-    // 1. записать в стейт № вопроса и правильность ответа (true / false)
-    // 2. обновить стейт текущего вопроса на следующий
+    // обновили состояние результатов тестирования
+    testingState.accept(testing);
+
+    // для перехода к следующему вопросу
+    currentQuestion ++;
+
+    // обновить стейт текущего вопроса на следующий или закончить
+    _goNextQuestion();
+
+  }
+
+  /// проверка правильности ответа
+  /// [response] - индекс ответа
+  /// [idRightResponse] - индекс правильного ответа
+  bool _checkResponse({
+    required int response,
+    required int idRightResponse,
+  }) {
+    return response == idRightResponse;
+  }
+
+  /// переход к следующему вопросу
+  /// если вопрос последний, то показываем результат
+  void _goNextQuestion() {
+    if (currentQuestion < (totalQuestions - 1)) {
+      currentQuestionState.accept(interactor.getQuestions().elementAt(currentQuestion));
+    } else {
+      _onFinish();
+    }
   }
 }
 

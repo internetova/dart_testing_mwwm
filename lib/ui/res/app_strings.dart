@@ -8,5 +8,4 @@ class AppStrings {
   static const buttonLabelFinish = 'Закончить';
   static const buttonLabelRepeat = 'Повторить';
   static const textStart = 'Хотите протестировать свои знания по Dart?';
-
 }
