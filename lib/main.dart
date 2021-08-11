@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         theme: _lightTheme,
         darkTheme: _darkTheme,
         themeMode: ThemeMode.system,
-        home: HomeScreen(),
+        home: const HomeScreen(),
       ),
     );
   }

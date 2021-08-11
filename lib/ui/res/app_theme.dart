@@ -8,7 +8,7 @@ class AppTheme {
   AppTheme();
 
   static ThemeData buildTheme() {
-    final ThemeData base = ThemeData.light();
+    final base = ThemeData.light();
 
     return base.copyWith(
       brightness: Brightness.light,
@@ -17,7 +17,7 @@ class AppTheme {
 
   ///DARK
   static ThemeData buildThemeDark() {
-    final ThemeData base = ThemeData.dark();
+    final base = ThemeData.dark();
 
     return base.copyWith(
       brightness: Brightness.dark,
