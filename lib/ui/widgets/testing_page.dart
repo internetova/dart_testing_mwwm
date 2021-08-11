@@ -21,21 +21,21 @@ class TestingPage extends StatelessWidget {
     return StreamedStateBuilder<Question>(
       streamedState: question,
       builder: (context, question) {
-        return Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            _BuildQuestion(question: question.question),
-            const SizedBox(
-              width: double.infinity,
-              height: 20,
-            ),
-            _BuildResponseOptions(
-              responseOptions: question.responseOptions,
-              onPressed: onPressed,
-            ),
-          ],
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              _BuildQuestion(question: question.question),
+              const SizedBox(
+                width: double.infinity,
+                height: 20,
+              ),
+              _BuildResponseOptions(
+                responseOptions: question.responseOptions,
+                onPressed: onPressed,
+              ),
+            ],
+          ),
         );
       },
     );
@@ -55,7 +55,7 @@ class _BuildQuestion extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       question,
-      style: Theme.of(context).textTheme.headline4,
+      style: Theme.of(context).textTheme.headline5,
       textAlign: TextAlign.center,
     );
   }
