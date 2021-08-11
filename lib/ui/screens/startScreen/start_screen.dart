@@ -22,11 +22,13 @@ class StartScreen extends CoreMwwmWidget<StartScreenWidgetModel> {
 class _StartScreenState
     extends WidgetState<StartScreen, StartScreenWidgetModel> {
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text(AppStrings.titleAppBarHome),
-        ),
-        body: StreamedStateBuilder<StatusStartScreen>(
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(AppStrings.titleAppBarHome),
+      ),
+      body: SingleChildScrollView(
+        child: StreamedStateBuilder<StatusStartScreen>(
           streamedState: wm.currentStatusState,
           builder: (context, state) {
             Widget child;
@@ -53,16 +55,18 @@ class _StartScreenState
             return child;
           },
         ),
-        floatingActionButton: StreamedStateBuilder<String>(
-          streamedState: wm.buttonState,
-          builder: (_, buttonStateTitle) {
-            return CustomTextButton(
-              onPressed: buttonStateTitle == AppStrings.buttonLabelFinish
-                  ? wm.onFinishAction
-                  : wm.onStartAction,
-              title: buttonStateTitle,
-            );
-          },
-        ),
-      );
+      ),
+      floatingActionButton: StreamedStateBuilder<String>(
+        streamedState: wm.buttonState,
+        builder: (_, buttonStateTitle) {
+          return CustomTextButton(
+            onPressed: buttonStateTitle == AppStrings.buttonLabelFinish
+                ? wm.onFinishAction
+                : wm.onStartAction,
+            title: buttonStateTitle,
+          );
+        },
+      ),
+    );
+  }
 }

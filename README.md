@@ -1,16 +1,26 @@
-# dart_testing
+# Задача по MWWM
 
-A new Flutter project.
+Реализовать собственный пример на MWWM
 
-## Getting Started
+## Приложение для тестирования
 
-This project is a starting point for a Flutter application.
+### Логика приложения
 
-A few resources to get you started if this is your first Flutter project:
+Один экран и одна виджет модель.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Есть Главная страница, на ней Стартовый текст и кнопка Начать.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+После нажатия кнопки Начать контент стартовой страницы меняется на страницу с Вопросом и вариантами ответа. Кнопка Начать меняется на Закончить.
+
+При нажатии на ответ id вопроса и правильность ответа записывается в стейт и показывается следующий вопрос. Если это был последний вопрос, то покажем контент с результатами.
+
+По нажатии на кнопку Закончить контент страницы меняется на Результат теста (сколько было вопросов и правильных ответов). Кнопка меняется на Пройти еще раз.
+
+
+### Базовый вариант
+![экран обнобоардинг](docs/images/demo-mwwm-1.gif)
+
+## Использовались библиотеки Surf
+
+- [https://pub.dev/packages/mwwm](https://pub.dev/packages/mwwm)
+- [https://pub.dev/packages/relation](https://pub.dev/packages/relation)

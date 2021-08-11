@@ -18,24 +18,26 @@ class ResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamedStateBuilder<ResultTesting>(
       streamedState: resultTestingState,
-      builder: (context, state) => Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const _BuildHeaderResult(),
-            const SizedBox(height: 40),
-            _BuildNumberQuestions(
-              questions: state.numberQuestions.toString(),
-            ),
-            const SizedBox(width: double.infinity, height: 20),
-            _BuildNumberErrors(
-              errors: state.numberErrors.toString(),
-            ),
-            const SizedBox(height: 40),
-            _BuildProgress(results: results),
-          ],
-        ),
-      ),
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const _BuildHeaderResult(),
+              const SizedBox(height: 40),
+              _BuildNumberQuestions(
+                questions: state.numberQuestions.toString(),
+              ),
+              const SizedBox(width: double.infinity, height: 20),
+              _BuildNumberErrors(
+                errors: state.numberErrors.toString(),
+              ),
+              const SizedBox(height: 40),
+              _BuildProgress(results: results),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -148,10 +150,7 @@ class _BuildProgress extends StatelessWidget {
             height: 16,
           ),
           Row(
-            children: results
-                .map((e) =>
-                    e == true ? const _BuildBoxGreen() : const _BuildBoxRed())
-                .toList(),
+            children: results.map((e) => _BuildColoredBox(isRight: e)).toList(),
           ),
         ],
       ),
@@ -160,30 +159,21 @@ class _BuildProgress extends StatelessWidget {
 }
 
 /// цвет для шкалы прогресса
-class _BuildBoxGreen extends StatelessWidget {
-  const _BuildBoxGreen({Key? key}) : super(key: key);
+/// [isRight] - правильный ответ
+class _BuildColoredBox extends StatelessWidget {
+  final bool isRight;
+
+  const _BuildColoredBox({
+    required this.isRight,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Expanded(
+    return Expanded(
       child: ColoredBox(
-        color: Colors.green,
-        child: Text(''),
-      ),
-    );
-  }
-}
-
-/// цвет для шкалы прогресса
-class _BuildBoxRed extends StatelessWidget {
-  const _BuildBoxRed({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Expanded(
-      child: ColoredBox(
-        color: Colors.red,
-        child: Text(''),
+        color: isRight == true ? Colors.green : Colors.red,
+        child: const Text(''),
       ),
     );
   }
