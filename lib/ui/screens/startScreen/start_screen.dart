@@ -2,7 +2,7 @@ import 'package:dart_testing/ui/res/app_strings.dart';
 import 'package:dart_testing/ui/screens/startScreen/start_screen_wm.dart';
 import 'package:dart_testing/ui/widgets/custom_text_button.dart';
 import 'package:dart_testing/ui/widgets/result_page.dart';
-import 'package:dart_testing/ui/widgets/start_text.dart';
+// import 'package:dart_testing/ui/widgets/start_text.dart';
 import 'package:dart_testing/ui/widgets/testing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:mwwm/mwwm.dart';
@@ -49,7 +49,8 @@ class _StartScreenState
                 );
                 break;
               default:
-                child = const StartText(content: AppStrings.textStart);
+                // child = const StartText(content: AppStrings.textStart);
+                child = const Text(AppStrings.textStart);
             }
 
             return child;

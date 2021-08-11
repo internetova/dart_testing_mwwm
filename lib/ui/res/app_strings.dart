@@ -1,5 +1,6 @@
 class AppStrings {
 
+  static const appTitle = 'Тестирование';
   static const pageLabelTest = 'тестирование';
   static const pageLabelStatistic = 'статистика';
   static const titleAppBarHome = 'Тестирование';
