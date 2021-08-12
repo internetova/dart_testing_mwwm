@@ -19,8 +19,8 @@ class ContentWrapper extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.3),
-            spreadRadius: 3,
-            blurRadius: 10,
+            spreadRadius: 2,
+            blurRadius: 12,
             offset: const Offset(4, 4),
           ),
         ],

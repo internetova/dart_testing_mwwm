@@ -74,7 +74,6 @@ class TestingScreenWidgetModel extends WidgetModel {
 
     dataQuestions = _interactor.getQuestions().toList();
     totalQuestions = dataQuestions.length;
-
     currentQuestionState = StreamedState<Question>(
       dataQuestions.elementAt(currentQuestionIndex),
     );
@@ -167,7 +166,7 @@ class TestingScreenWidgetModel extends WidgetModel {
   /// переход к следующему вопросу
   /// если вопрос последний, то показываем результат
   void _goNextQuestion() {
-    if (currentQuestionIndex < (totalQuestions - 1)) {
+    if (currentQuestionIndex < totalQuestions) {
       currentQuestionState
           .accept(_interactor.getQuestions().elementAt(currentQuestionIndex));
     } else {
