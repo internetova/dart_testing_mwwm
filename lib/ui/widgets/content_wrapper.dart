@@ -14,18 +14,23 @@ class ContentWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.white,
-        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 12,
-            offset: const Offset(4, 4),
+            color: Theme.of(context).colorScheme.colorShadow,
+            spreadRadius: 4,
+            blurRadius: 20,
           ),
         ],
       ),
-      child: child,
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.white,
+          ),
+          child: child,
+        ),
+      ),
     );
   }
 }

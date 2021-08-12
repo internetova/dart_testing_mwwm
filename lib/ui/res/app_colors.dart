@@ -27,6 +27,7 @@ class AppColors {
   static const splashButtonResponse = Color(0xFF5935DE);
   static const titleButtonResponse = Color(0xFF656565);
   static const dividerButtonResponse = Color(0xFFE7E6E6);
+  static const colorShadow = Color(0x54000000);
 
   AppColors._();
 }

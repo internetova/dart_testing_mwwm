@@ -61,7 +61,6 @@ class _TestingScreenState
                                 responseOptions: question.responseOptions,
                                 onPressed: wm.onRespondAction,
                               ),
-                              const SizedBox(height: 12),
                             ],
                           );
                         },

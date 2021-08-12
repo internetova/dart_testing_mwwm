@@ -58,4 +58,6 @@ extension CustomColorScheme on ColorScheme {
   Color get titleButtonResponse => AppColors.titleButtonResponse;
 
   Color get dividerButtonResponse => AppColors.dividerButtonResponse;
+
+  Color get colorShadow => AppColors.colorShadow;
 }
