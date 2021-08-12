@@ -230,9 +230,9 @@ class _ProgressIndicator extends StatelessWidget {
     required int currentIndex,
   }) {
     if (index < currentIndex || index == currentIndex) {
-      return Theme.of(context).colorScheme.bgButton;
+      return Theme.of(context).colorScheme.colorIndicatorDark;
     } else {
-      return Theme.of(context).colorScheme.bgScreenOneDark;
+      return Theme.of(context).colorScheme.colorIndicatorLight;
     }
   }
 }
