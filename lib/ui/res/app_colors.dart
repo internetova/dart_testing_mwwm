@@ -9,13 +9,24 @@ class AppColors {
   static const bgScreenOneDark = Color(0xFFF59E0B);
   static const bgScreenTwoLight = Color(0xFF9163FB);
   static const bgScreenTwoDark = Color(0xFF5935DE);
-  static const bgScreenThreeLight = Color(0xFFFFDFE0);
-  static const bgScreenThreeDark = Color(0xFFF7A9A0);
+
+  /// нет ошибок в ответах
+  static const bgScreenThreeLight = Color(0xFFB2E27B);
+  static const bgScreenThreeDark = Color(0xFF025A18);
+
+  /// есть хотя бы 1 ошибка
+  static const bgScreenFourLight = Colors.deepOrangeAccent;
+  static const bgScreenFourDark = Colors.red;
 
   /// для кнопок
   static const bgButton = Colors.deepOrange;
   static const splashButton = Colors.limeAccent;
 
+  /// для кнопки ответа
+  static const bgButtonResponse = Color(0xFFF9F9F9);
+  static const splashButtonResponse = Color(0xFF5935DE);
+  static const titleButtonResponse = Color(0xFF656565);
+  static const dividerButtonResponse = Color(0xFFE7E6E6);
+
   AppColors._();
 }
-

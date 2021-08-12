@@ -17,7 +17,7 @@ class BackgroundScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 60),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,

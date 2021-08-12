@@ -17,11 +17,12 @@ class HomeScreen extends StatelessWidget {
         colorTwo: Theme.of(context).colorScheme.bgScreenOneLight,
         child: Column(
           children: [
-            const Spacer(),
             const _BuildStartText(content: AppStrings.textStart),
+            const SizedBox(height: 40),
             RoundButton(
               title: AppStrings.buttonLabelStart,
               size: 140,
+              fontSize: 24,
               onPressed: () => AppRoutes.goTestingScreen(context),
             ),
             const Spacer(),

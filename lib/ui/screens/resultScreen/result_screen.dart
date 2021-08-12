@@ -2,7 +2,8 @@ import 'package:dart_testing/domain/testing.dart';
 import 'package:dart_testing/ui/res/app_routes.dart';
 import 'package:dart_testing/ui/res/app_strings.dart';
 import 'package:dart_testing/ui/widgets/background_screen.dart';
-import 'package:dart_testing/ui/widgets/rounded_button.dart';
+import 'package:dart_testing/ui/widgets/content_wrapper.dart';
+import 'package:dart_testing/ui/widgets/round_button.dart';
 import 'package:flutter/material.dart';
 import 'package:dart_testing/ui/res/app_theme.dart';
 
@@ -23,29 +24,64 @@ class ResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundScreen(
-        colorOne: Theme.of(context).colorScheme.bgScreenThreeDark,
-        colorTwo: Theme.of(context).colorScheme.bgScreenThreeLight,
-        child: Column(
-          children: [
-            const _BuildHeaderResult(),
-            const SizedBox(height: 40),
-            _BuildNumberQuestions(
-              questions: resultTesting.numberQuestions.toString(),
+        colorOne: _getColorScreen(
+          colorCorrect: Theme.of(context).colorScheme.bgScreenThreeDark,
+          colorError: Theme.of(context).colorScheme.bgScreenFourDark,
+        ),
+        colorTwo: _getColorScreen(
+          colorCorrect: Theme.of(context).colorScheme.bgScreenThreeLight,
+          colorError: Theme.of(context).colorScheme.bgScreenFourLight,
+        ),
+        child: CustomScrollView(
+          slivers: [
+          SliverList(
+          delegate: SliverChildListDelegate([
+
+            Column(
+              children: [
+                const SizedBox(height: 40),
+                ContentWrapper(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 30),
+                      const _BuildHeaderResult(),
+                      const SizedBox(height: 40),
+                      _BuildNumberQuestions(
+                        questions: resultTesting.numberQuestions.toString(),
+                      ),
+                      const SizedBox(width: double.infinity, height: 20),
+                      _BuildNumberErrors(
+                        errors: resultTesting.numberErrors.toString(),
+                      ),
+                      const SizedBox(height: 40),
+                      _BuildProgress(results: results),
+                      const SizedBox(height: 30),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: double.infinity, height: 20),
-            _BuildNumberErrors(
-              errors: resultTesting.numberErrors.toString(),
-            ),
-            const SizedBox(height: 40),
-            _BuildProgress(results: results),
-          ],
+          ]),
+          ),
+        ],
+
         ),
       ),
-      floatingActionButton: RoundedButton(
+      floatingActionButton: RoundButton(
         title: AppStrings.buttonLabelRepeat,
         onPressed: () => AppRoutes.goTestingScreen(context),
+        size: 100,
+        fontSize: 18,
       ),
     );
+  }
+
+  /// цвета в зависимости от наличия ошибок в ответах
+  Color _getColorScreen({
+    required Color colorCorrect,
+    required Color colorError,
+  }) {
+    return resultTesting.numberErrors == 0 ? colorCorrect : colorError;
   }
 }
 
@@ -55,10 +91,13 @@ class _BuildHeaderResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      AppStrings.textResultPageResult,
-      style: Theme.of(context).textTheme.headline3,
-      textAlign: TextAlign.right,
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: Text(
+        AppStrings.textResultPageResult,
+        style: Theme.of(context).textTheme.headline6,
+        textAlign: TextAlign.center,
+      ),
     );
   }
 }
@@ -79,7 +118,10 @@ class _BuildNumberQuestions extends StatelessWidget {
         Expanded(
           child: Text(
             AppStrings.textResultPageQuestions,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.titleButtonResponse,
+                ),
             textAlign: TextAlign.right,
           ),
         ),
@@ -88,7 +130,7 @@ class _BuildNumberQuestions extends StatelessWidget {
           child: Text(
             questions,
             style: Theme.of(context).textTheme.headline4,
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.center,
           ),
         ),
       ],
@@ -112,10 +154,10 @@ class _BuildNumberErrors extends StatelessWidget {
         Expanded(
           child: Text(
             AppStrings.textResultPageErrors,
-            style: Theme.of(context)
-                .textTheme
-                .bodyText1
-                ?.copyWith(color: Theme.of(context).errorColor),
+            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.bgButton,
+                ),
             textAlign: TextAlign.right,
           ),
         ),
@@ -126,8 +168,8 @@ class _BuildNumberErrors extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .headline4
-                ?.copyWith(color: Theme.of(context).errorColor),
-            textAlign: TextAlign.left,
+                ?.copyWith(color: Theme.of(context).colorScheme.bgButton),
+            textAlign: TextAlign.center,
           ),
         ),
       ],
@@ -146,20 +188,24 @@ class _BuildProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
-      child: Stack(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            decoration: const BoxDecoration(),
-            width: double.infinity,
-            height: 16,
-          ),
-          Row(
-            children: results.map((e) => _BuildColoredBox(isRight: e)).toList(),
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        child: Stack(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: const BoxDecoration(),
+              width: double.infinity,
+              height: 16,
+            ),
+            Row(
+              children:
+                  results.map((e) => _BuildColoredBox(isRight: e)).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -179,7 +225,9 @@ class _BuildColoredBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ColoredBox(
-        color: isRight == true ? Colors.green : Colors.red,
+        color: isRight == true
+            ? Colors.green
+            : Theme.of(context).colorScheme.bgButton,
         child: const Text(''),
       ),
     );

@@ -12,6 +12,7 @@ class AppTheme {
 
     return base.copyWith(
       brightness: Brightness.light,
+      primaryColor: AppColors.bgButton,
     );
   }
 
@@ -21,6 +22,7 @@ class AppTheme {
 
     return base.copyWith(
       brightness: Brightness.dark,
+      primaryColor: AppColors.bgButton,
     );
   }
 }
@@ -41,7 +43,19 @@ extension CustomColorScheme on ColorScheme {
 
   Color get bgScreenThreeDark => AppColors.bgScreenThreeDark;
 
+  Color get bgScreenFourLight => AppColors.bgScreenFourLight;
+
+  Color get bgScreenFourDark => AppColors.bgScreenFourDark;
+
   Color get bgButton => AppColors.bgButton;
 
   Color get splashButton => AppColors.splashButton;
+
+  Color get bgButtonResponse => AppColors.bgButtonResponse;
+
+  Color get splashButtonResponse => AppColors.splashButtonResponse;
+
+  Color get titleButtonResponse => AppColors.titleButtonResponse;
+
+  Color get dividerButtonResponse => AppColors.dividerButtonResponse;
 }

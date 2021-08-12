@@ -17,6 +17,10 @@ class TestingScreenWidgetModel extends WidgetModel {
     responses: [],
   );
 
+  /// Получим список вопросов
+  /// будем использовать для построения прогресса прохождения теста
+  late final List<Question> dataQuestions;
+
   /// Узнаем количество вопросов в тесте
   late final int totalQuestions;
 
@@ -24,6 +28,10 @@ class TestingScreenWidgetModel extends WidgetModel {
 
   /// текущий вопрос на экране
   late final StreamedState<Question> currentQuestionState;
+
+  /// текущий индекс вопроса на экране
+  /// будем использовать для построения прогресса прохождения теста
+  late final StreamedState<int> currentQuestionIndexState;
 
   /// состояние тестирования
   late final StreamedState<Testing> testingState;
@@ -46,7 +54,7 @@ class TestingScreenWidgetModel extends WidgetModel {
   final BuildContext _context;
 
   /// Если выводим вопросы по порядку, то это для перехода к следующему вопросу
-  int currentQuestion = 0;
+  int currentQuestionIndex = 0;
 
   TestingScreenWidgetModel(
     WidgetModelDependencies baseDependencies,
@@ -63,10 +71,14 @@ class TestingScreenWidgetModel extends WidgetModel {
         numberErrors: 0,
       ),
     );
-    totalQuestions = _interactor.getQuestions().length;
+
+    dataQuestions = _interactor.getQuestions().toList();
+    totalQuestions = dataQuestions.length;
+
     currentQuestionState = StreamedState<Question>(
-      _interactor.getQuestions().elementAt(currentQuestion),
+      dataQuestions.elementAt(currentQuestionIndex),
     );
+    currentQuestionIndexState = StreamedState<int>(currentQuestionIndex);
 
     super.onLoad();
   }
@@ -86,12 +98,14 @@ class TestingScreenWidgetModel extends WidgetModel {
     if (testing.idsQuestions.isNotEmpty) {
       testing.idsQuestions.clear();
       testing.responses.clear();
-      currentQuestion = 0;
+      currentQuestionIndex = 0;
     }
 
     // запускаем тест
     currentQuestionState
-        .accept(_interactor.getQuestions().elementAt(currentQuestion));
+        .accept(_interactor.getQuestions().elementAt(currentQuestionIndex));
+
+    currentQuestionIndexState.accept(currentQuestionIndex);
   }
 
   /// обрабатываем клик по кнопке Закончить
@@ -133,7 +147,8 @@ class TestingScreenWidgetModel extends WidgetModel {
     testingState.accept(testing);
 
     // для перехода к следующему вопросу
-    currentQuestion++;
+    currentQuestionIndex++;
+    currentQuestionIndexState.accept(currentQuestionIndex);
 
     // обновить стейт текущего вопроса на следующий или закончить
     _goNextQuestion();
@@ -152,9 +167,9 @@ class TestingScreenWidgetModel extends WidgetModel {
   /// переход к следующему вопросу
   /// если вопрос последний, то показываем результат
   void _goNextQuestion() {
-    if (currentQuestion < (totalQuestions - 1)) {
+    if (currentQuestionIndex < (totalQuestions - 1)) {
       currentQuestionState
-          .accept(_interactor.getQuestions().elementAt(currentQuestion));
+          .accept(_interactor.getQuestions().elementAt(currentQuestionIndex));
     } else {
       _onFinish();
     }

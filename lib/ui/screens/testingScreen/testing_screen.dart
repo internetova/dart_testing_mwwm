@@ -2,8 +2,8 @@ import 'package:dart_testing/domain/question.dart';
 import 'package:dart_testing/ui/res/app_strings.dart';
 import 'package:dart_testing/ui/screens/testingScreen/testing_screen_mw.dart';
 import 'package:dart_testing/ui/widgets/background_screen.dart';
-import 'package:dart_testing/ui/widgets/custom_text_button_response.dart';
-import 'package:dart_testing/ui/widgets/rounded_button.dart';
+import 'package:dart_testing/ui/widgets/content_wrapper.dart';
+import 'package:dart_testing/ui/widgets/round_button.dart';
 import 'package:flutter/material.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:dart_testing/ui/res/app_theme.dart';
@@ -33,33 +33,52 @@ class _TestingScreenState
       body: BackgroundScreen(
         colorOne: Theme.of(context).colorScheme.bgScreenTwoDark,
         colorTwo: Theme.of(context).colorScheme.bgScreenTwoLight,
-        child: Center(
-          child: StreamedStateBuilder<Question>(
-            streamedState: wm.currentQuestionState,
-            builder: (context, question) {
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
+        child: CustomScrollView(
+          slivers: [
+            SliverList(
+              delegate: SliverChildListDelegate([
+                Column(
                   children: [
-                    _BuildQuestion(question: question.question),
-                    const SizedBox(
-                      width: double.infinity,
-                      height: 20,
+                    _ProgressIndicator(
+                      data: wm.dataQuestions,
+                      currentIndex: wm.currentQuestionIndexState,
                     ),
-                    _BuildResponseOptions(
-                      responseOptions: question.responseOptions,
-                      onPressed: wm.onRespondAction,
+                    const SizedBox(height: 40),
+                    ContentWrapper(
+                      child: StreamedStateBuilder<Question>(
+                        streamedState: wm.currentQuestionState,
+                        builder: (context, question) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(height: 30),
+                              _BuildQuestion(question: question.question),
+                              const SizedBox(
+                                width: double.infinity,
+                                height: 30,
+                              ),
+                              _BuildResponseOptions(
+                                responseOptions: question.responseOptions,
+                                onPressed: wm.onRespondAction,
+                              ),
+                              const SizedBox(height: 12),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
-              );
-            },
-          ),
+              ]),
+            ),
+          ],
         ),
       ),
-      floatingActionButton: RoundedButton(
+      floatingActionButton: RoundButton(
         title: AppStrings.buttonLabelFinish,
         onPressed: wm.onFinishAction,
+        size: 100,
+        fontSize: 18,
       ),
     );
   }
@@ -76,10 +95,13 @@ class _BuildQuestion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      question,
-      style: Theme.of(context).textTheme.headline5,
-      textAlign: TextAlign.center,
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: Text(
+        question,
+        style: Theme.of(context).textTheme.headline6,
+        textAlign: TextAlign.center,
+      ),
     );
   }
 }
@@ -98,18 +120,120 @@ class _BuildResponseOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: responseOptions
-          .asMap()
-          .map((i, element) => MapEntry(
-        i,
-        CustomTextButtonResponse(
-          onPressed: () => onPressed(i),
-          title: element,
-        ),
-      ))
-          .values
-          .toList(),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.dividerButtonResponse,
+      ),
+      child: Column(
+        children: responseOptions
+            .asMap()
+            .map((i, element) => MapEntry(
+                  i,
+                  _BuildResponse(
+                    onPressed: () => onPressed(i),
+                    title: element,
+                  ),
+                ))
+            .values
+            .toList(),
+      ),
     );
+  }
+}
+
+/// Текстовая кнопка с вариантом ответа
+class _BuildResponse extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String title;
+
+  const _BuildResponse({
+    required this.onPressed,
+    required this.title,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 1.0),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          primary: Theme.of(context).colorScheme.splashButtonResponse,
+          backgroundColor: Theme.of(context).colorScheme.bgButtonResponse,
+          minimumSize: const Size(double.infinity, 40),
+          shape: const RoundedRectangleBorder(),
+          alignment: Alignment.centerLeft,
+        ),
+        onPressed: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.all(25.0),
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.titleButtonResponse,
+                ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// индикатор оставшихся вопросов
+class _ProgressIndicator extends StatelessWidget {
+  final List<Question> data;
+  final StreamedState<int> currentIndex;
+
+  const _ProgressIndicator({
+    required this.data,
+    required this.currentIndex,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamedStateBuilder<int>(
+      streamedState: currentIndex,
+      builder: (context, currentIndex) {
+        return Row(
+          children: data
+              .asMap()
+              .map(
+                (i, element) => MapEntry(
+                  i,
+                  Expanded(
+                    child: Container(
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: _getColor(
+                          context,
+                          index: i,
+                          currentIndex: currentIndex,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+              .values
+              .toList(),
+        );
+      },
+    );
+  }
+
+  /// цвет меток индикатора
+  Color _getColor(
+    BuildContext context, {
+    required int index,
+    required int currentIndex,
+  }) {
+    if (index < currentIndex || index == currentIndex) {
+      return Theme.of(context).colorScheme.bgButton;
+    } else {
+      return Theme.of(context).colorScheme.bgScreenOneDark;
+    }
   }
 }

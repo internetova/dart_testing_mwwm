@@ -5,12 +5,14 @@ import 'package:dart_testing/ui/res/app_theme.dart';
 class RoundButton extends StatelessWidget {
   final String title;
   final double size;
+  final double fontSize;
   final VoidCallback onPressed;
 
   const RoundButton({
     required this.title,
     required this.size,
     required this.onPressed,
+    required this.fontSize,
     Key? key,
   }) : super(key: key);
 
@@ -20,10 +22,10 @@ class RoundButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         title,
-        style: Theme.of(context)
-            .textTheme
-            .headline5
-            ?.copyWith(color: Theme.of(context).colorScheme.white),
+        style: Theme.of(context).textTheme.headline5?.copyWith(
+              fontSize: fontSize,
+              color: Theme.of(context).colorScheme.white,
+            ),
       ),
       style: OutlinedButton.styleFrom(
         minimumSize: Size(size, size),
@@ -36,6 +38,7 @@ class RoundButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(size / 2),
         ),
+        elevation: 6,
       ),
     );
   }
