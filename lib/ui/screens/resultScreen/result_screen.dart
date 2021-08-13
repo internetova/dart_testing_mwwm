@@ -32,37 +32,31 @@ class ResultScreen extends StatelessWidget {
           colorCorrect: Theme.of(context).colorScheme.bgScreenThreeLight,
           colorError: Theme.of(context).colorScheme.bgScreenFourLight,
         ),
-        child: CustomScrollView(
-          slivers: [
-            SliverList(
-              delegate: SliverChildListDelegate([
-                Column(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 40),
+              ContentWrapper(
+                child: Column(
                   children: [
+                    const SizedBox(height: 30),
+                    const _BuildHeaderResult(),
                     const SizedBox(height: 40),
-                    ContentWrapper(
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 30),
-                          const _BuildHeaderResult(),
-                          const SizedBox(height: 40),
-                          _BuildNumberQuestions(
-                            questions: resultTesting.numberQuestions.toString(),
-                          ),
-                          const SizedBox(width: double.infinity, height: 20),
-                          _BuildNumberErrors(
-                            errors: resultTesting.numberErrors.toString(),
-                          ),
-                          const SizedBox(height: 40),
-                          _BuildProgress(results: results),
-                          const SizedBox(height: 30),
-                        ],
-                      ),
+                    _BuildNumberQuestions(
+                      questions: resultTesting.numberQuestions.toString(),
                     ),
+                    const SizedBox(width: double.infinity, height: 20),
+                    _BuildNumberErrors(
+                      errors: resultTesting.numberErrors.toString(),
+                    ),
+                    const SizedBox(height: 40),
+                    _BuildProgress(results: results),
+                    const SizedBox(height: 30),
                   ],
                 ),
-              ]),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: RoundButton(
@@ -152,7 +146,7 @@ class _BuildNumberErrors extends StatelessWidget {
         Expanded(
           child: Text(
             AppStrings.textResultPageErrors,
-            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(
                   fontSize: 16,
                   color: Theme.of(context).colorScheme.titleButtonResponse,
                 ),
@@ -164,7 +158,7 @@ class _BuildNumberErrors extends StatelessWidget {
           child: Text(
             errors,
             style: Theme.of(context).textTheme.headline4?.copyWith(
-                  color: Theme.of(context).colorScheme.bgScreenFourLight,
+                  color: Theme.of(context).colorScheme.bgScreenFourDark,
                 ),
             textAlign: TextAlign.center,
           ),
@@ -224,7 +218,7 @@ class _BuildColoredBox extends StatelessWidget {
       child: ColoredBox(
         color: isRight == true
             ? Theme.of(context).colorScheme.bgScreenTwoLight
-            : Theme.of(context).colorScheme.bgScreenFourLight,
+            : Theme.of(context).colorScheme.bgScreenFourDark,
         child: const Text(''),
       ),
     );

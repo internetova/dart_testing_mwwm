@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:relation/relation.dart';
 
 /// Виджет модель для экрана тестирования
-class TestingScreenWidgetModel extends WidgetModel {
+class TestingScreenWidgetModel extends WidgetModel
+    with TickerProviderWidgetModelMixin {
   /// ДАННЫЕ ДЛЯ РАБОТЫ
   /// временное хранилище результата тестирования - сюда будем записывать
   /// id вопроса и правильность ответа
@@ -24,6 +25,9 @@ class TestingScreenWidgetModel extends WidgetModel {
   /// Узнаем количество вопросов в тесте
   late final int totalQuestions;
 
+  /// для анимации
+  late final AnimationController animationController;
+
   /// СОСТОЯНИЯ
 
   /// текущий вопрос на экране
@@ -38,6 +42,9 @@ class TestingScreenWidgetModel extends WidgetModel {
 
   /// состояние результата тестирования -> тестирование закончено
   late final StreamedState<ResultTesting> resultTestingState;
+
+  /// варианты анимации для карточки с вопросом и ответами
+  late final StreamedState<Animation<Offset>> cardQuestionsAnimationState;
 
   /// СОБЫТИЯ
   /// клик по кнопке Начать
@@ -74,10 +81,25 @@ class TestingScreenWidgetModel extends WidgetModel {
 
     dataQuestions = _interactor.getQuestions().toList();
     totalQuestions = dataQuestions.length;
+
     currentQuestionState = StreamedState<Question>(
       dataQuestions.elementAt(currentQuestionIndex),
     );
     currentQuestionIndexState = StreamedState<int>(currentQuestionIndex);
+
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    cardQuestionsAnimationState = StreamedState<Animation<Offset>>(
+      _changeAnimation(
+        begin: Offset.zero,
+        end: Offset.zero,
+      ),
+    );
+
+    animationController.forward();
 
     super.onLoad();
   }
@@ -89,6 +111,12 @@ class TestingScreenWidgetModel extends WidgetModel {
     subscribe(onRespondAction.stream, (index) => _onRespond(index as int));
 
     super.onBind();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 
   /// обрабатываем клик по кнопке Начать
@@ -145,12 +173,35 @@ class TestingScreenWidgetModel extends WidgetModel {
     // обновили состояние результатов тестирования
     testingState.accept(testing);
 
+    // предыдущая карточка едет влево
+    cardQuestionsAnimationState.accept(
+      _changeAnimation(
+        begin: Offset.zero,
+        end: const Offset(-3, 0),
+      ),
+    );
+
+    // запустить анимацию
+    _startAnimation();
+
     // для перехода к следующему вопросу
     currentQuestionIndex++;
     currentQuestionIndexState.accept(currentQuestionIndex);
 
-    // обновить стейт текущего вопроса на следующий или закончить
-    _goNextQuestion();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _goNextQuestion();
+
+      // новая карточка появляется справа
+      cardQuestionsAnimationState.accept(
+        _changeAnimation(
+          begin: const Offset(3, 0),
+          end: Offset.zero,
+        ),
+      );
+
+      // запустить анимацию
+      _startAnimation();
+    });
   }
 
   /// проверка правильности ответа
@@ -172,6 +223,33 @@ class TestingScreenWidgetModel extends WidgetModel {
     } else {
       _onFinish();
     }
+  }
+
+  /// Методы для анимации карточки.
+  /// Самая первая карточка должна быть уже на экране, при клике на вариант
+  /// ответа она уезжает влево, справа появляется новая.
+  /// ----------------
+  /// Изменить анимацию
+  Animation<Offset> _changeAnimation({
+    required Offset begin,
+    required Offset end,
+  }) {
+    return Tween<Offset>(
+      begin: begin,
+      end: end,
+    ).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.easeIn,
+      ),
+    );
+  }
+
+  /// перезапуск анимации карточки с новыми параметрами
+  void _startAnimation() {
+    animationController
+      ..reset()
+      ..forward();
   }
 }
 

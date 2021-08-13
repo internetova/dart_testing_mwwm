@@ -33,18 +33,20 @@ class _TestingScreenState
       body: BackgroundScreen(
         colorOne: Theme.of(context).colorScheme.bgScreenTwoDark,
         colorTwo: Theme.of(context).colorScheme.bgScreenTwoLight,
-        child: CustomScrollView(
-          slivers: [
-            SliverList(
-              delegate: SliverChildListDelegate([
-                Column(
-                  children: [
-                    _ProgressIndicator(
-                      data: wm.dataQuestions,
-                      currentIndex: wm.currentQuestionIndexState,
-                    ),
-                    const SizedBox(height: 40),
-                    ContentWrapper(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _ProgressIndicator(
+                data: wm.dataQuestions,
+                currentIndex: wm.currentQuestionIndexState,
+              ),
+              const SizedBox(height: 50),
+              StreamedStateBuilder<Animation<Offset>>(
+                streamedState: wm.cardQuestionsAnimationState,
+                builder: (context, position) {
+                  return SlideTransition(
+                    position: position,
+                    child: ContentWrapper(
                       child: StreamedStateBuilder<Question>(
                         streamedState: wm.currentQuestionState,
                         builder: (context, question) {
@@ -66,11 +68,11 @@ class _TestingScreenState
                         },
                       ),
                     ),
-                  ],
-                ),
-              ]),
-            ),
-          ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: RoundButton(
